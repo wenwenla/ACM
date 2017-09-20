@@ -8,7 +8,7 @@ typedef unsigned long long ull;
 int km_match(char* pattern, char* str) {
     int plen = strlen(pattern);
     int slen = strlen(str);
-    int dt = (plen + 1) >> 1;
+    int dt = max(((plen - 1) >> 1), 1);
     int cnt = 0;
     ull phash = 0, shash = 0;
     ull con = 1;
