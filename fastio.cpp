@@ -2,17 +2,13 @@ namespace fastio {
     const int buf_size = 8388608;//about 8Mb
     char buf[buf_size];
     int pos = buf_size;
-	int in;
+    int in;
     bool eof = false;
 
     inline void read_next() {
         in = fread(buf, 1, buf_size, stdin);
         pos = 0;
-		eof = !in;
-    }
-
-    inline char pc() {
-        return buf[pos];
+        eof = !in;
     }
 
     inline char nc() {
@@ -30,9 +26,8 @@ namespace fastio {
             now = nc();
         }
         T ret = 0;
-        while(true) {
+        while(now != ' ' && now != '\n') {
             ret = ret * 10 + now - '0';
-            if(pc() == ' ' || pc() == '\n') break;
             now = nc();
         }
         res = (neg ? -ret : ret);
