@@ -20,6 +20,7 @@ struct bit_trie {
 
     void clear() {
         alloc = 1;
+		num_cnt = 0;
         node[rt].make(0, 0, -1, -1);
     }
 
