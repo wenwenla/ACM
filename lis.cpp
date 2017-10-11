@@ -1,3 +1,4 @@
+
 struct LIS {
     // O(nlgn), strictly increase monotonically
     const static int N = 100005;
