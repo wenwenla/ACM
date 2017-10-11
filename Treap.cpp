@@ -109,7 +109,7 @@ struct Treap {
                 rt = node[rt].ch[0];
             }
         }
-        return cnt;
+        return cnt + 1;
     }
 
     int size() { return node[m_rt].sz; }
@@ -152,7 +152,7 @@ public:
                     if(i < key) ++cnt;
                     else break;
                 }
-                assert(cnt == tr.rank(key));
+                assert(cnt + 1 == tr.rank(key));
             }
             puts("rank testing completed!");
         }
