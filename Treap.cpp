@@ -9,7 +9,7 @@ struct Treap {
             ch[0] = _l; ch[1] = _r; p = _p; v = _v; sz = 1;
         }
     } node[NODECNT];
-    int m_rt, mp[NODECNT], mp_idx;
+    int m_rt, mp[NODECNT], mp_idx, node_idx;
 
     void maintain(int x) {
         node[x].sz = 1;
@@ -25,14 +25,15 @@ struct Treap {
 
     void clear() {
         m_rt = -1;
-        mp_idx = 0;
-        for(int i = 0; i < NODECNT; ++i) mp[i] = i;
+        mp_idx = -1;
+        node_idx = 0;
     }
 
     void ins(int val) { _ins(m_rt, val); }
     void _ins(int& rt, int val) {
         if(rt == -1) {
-            node[rt = mp[mp_idx++]].make(-1, -1, rand(), val);
+            if(mp_idx == -1) { node[rt = node_idx++].make(-1, -1, rand(), val); }
+            else { node[rt = mp[mp_idx--]].make(-1, -1, rand(), val); }
         } else {
             int type = node[rt].v < val;
             _ins(node[rt].ch[type], val);
@@ -46,10 +47,10 @@ struct Treap {
 		assert(rt != -1);
         if(node[rt].v == val) {
             if(node[rt].ch[0] == -1) {
-                mp[--mp_idx] = rt;
+                mp[++mp_idx] = rt;
                 rt = node[rt].ch[1];
             } else if(node[rt].ch[1] == -1) {
-                mp[--mp_idx] = rt;
+                mp[++mp_idx] = rt;
                 rt = node[rt].ch[0];
             } else {
                 int next = node[node[rt].ch[0]].p < node[node[rt].ch[1]].p;
