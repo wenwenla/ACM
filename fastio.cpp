@@ -1,32 +1,36 @@
 namespace fastio {
-    const int buf_size = 8388608;//about 8Mb
-    char buf[buf_size];
-    int pos = buf_size;
-    int in;
+    const static int buf_size = 8388608;//about 8Mb
+    static char buf[buf_size];
+    char *ps = buf + buf_size, *pe = buf + buf_size;
+    int pos;
     bool eof = false;
 
     inline void read_next() {
-        in = fread(buf, 1, buf_size, stdin);
-        pos = 0;
-        eof = !in;
+        pe = buf + fread(buf, 1, buf_size, stdin);
+        ps = buf;
+        if(ps == pe) eof = true;
+    }
+
+    inline bool blank(char x) {
+        return x == ' ' || x == '\n' || x == '\t' || x == '\r';
     }
 
     inline char nc() {
-        if(pos == buf_size || pos == in) read_next();
-        return buf[pos++];
+        if(ps == pe) read_next();
+        return *ps++;
     }
 
     template<typename T>
     inline void read_num(T& res) {
         bool neg = false;
         char now = nc();
-        while(now == ' ' || now == '\n') now = nc();
+        while(blank(now)) now = nc();
         if(now == '-') {
             neg = true;
             now = nc();
         }
         T ret = 0;
-        while(now != ' ' && now != '\n') {
+        while(!blank(now)) {
             ret = ret * 10 + now - '0';
             now = nc();
         }
