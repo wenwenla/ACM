@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 namespace Dinic {
     const int V = 1000010, E = 8000010, INF = 1e9;
     int vcnt;
