@@ -1,10 +1,6 @@
 typedef long long ll;
 typedef unsigned long long ull;
 
-/*
- * str_match O(len(str))
- */
-
 int km_match(char* pattern, char* str) {
     int plen = strlen(pattern);
     int slen = strlen(str);

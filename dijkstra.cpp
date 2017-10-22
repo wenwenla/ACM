@@ -1,5 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
 using int64 = long long;
 struct edge {
     int to, cost, next;
@@ -43,21 +41,3 @@ int64 dijkstra(int s, int t) {
     }
     return dis[t];
 }
-
-int main() {
-    int n, m, s, t;
-    scanf("%d %d %d %d", &n, &m, &s, &t);
-    init_graph();
-    for(int i = 0; i != m; ++i) {
-        int u, v, c;
-        scanf("%d %d %d", &u, &v, &c);
-        addedge(u, v, c);
-        addedge(v, u, c);
-    }
-    printf("%lld\n", dijkstra(s, t));
-    return 0;
-}
-
-
-
-

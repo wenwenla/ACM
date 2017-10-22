@@ -1,11 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
-/*
- * https://cn.vjudge.net/problem/HDU-2586
- * O(1) getlca
- * */
-
 const int VN = 50000, EN = 100000;
 
 struct ST {
@@ -71,29 +63,4 @@ void dfs(int v, int height) {
 int lca(int u, int v) {
     int l = min(id[u], id[v]), r = max(id[u], id[v]);
     return la[st.query(l, r)];
-}
-
-int main() {
-    int T;
-    scanf("%d", &T);
-    while(T--) {
-        int n, q;
-        init();
-        scanf("%d %d", &n, &q);
-        for(int i = 0; i != n - 1; ++i) {
-            int u, v, w;
-            scanf("%d %d %d", &u, &v, &w);
-            addedge(u, v, w);
-            addedge(v, u, w);
-        }
-        dfs(1, 0);
-        st.make(lacnt);
-        while(q--) {
-            int u, v;
-            scanf("%d %d", &u, &v);
-            int ans = dis[u] + dis[v] - 2 * dis[lca(u, v)];
-            printf("%d\n", ans);
-        }
-    }
-    return 0;
 }

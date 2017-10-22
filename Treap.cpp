@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 struct Treap {
     const static int NODECNT = 1000005;
     struct Node {
@@ -115,49 +112,3 @@ struct Treap {
 
     int size() { return node[m_rt].sz; }
 } tr;
-
-class TEST {
-public:
-    TEST() {
-        int T = 20;
-        for(int t = 1; t <= T; ++t) {
-            printf("TEST %d\n", t);
-            multiset<int> ms;
-            int n = 100000;
-            tr.clear();
-            puts("clear testing completed!");
-            for(int i = 0; i < n; ++i) {
-                int k = rand() % 2000000000;
-                tr.ins(k);
-                ms.insert(k);
-                assert(tr.size() == (int)ms.size());
-            }
-            puts("ins testing completed!");
-            for(int i = 0; i < n; ++i) {
-                if(rand() % 2 && tr.find(i) != -1) {
-                    tr.del(i);
-                    ms.erase(ms.find(i));
-                    assert(tr.size() == (int)ms.size());
-                }
-            }
-            puts("del testing completed!");
-            int rk = 1;
-            for(auto i : ms) {
-                assert(i == tr.kth(rk++));
-            }
-            puts("kth testing completed!");
-            for(int i = 0; i < 1000; ++i) {
-                int key = rand() % 2000000000;
-                int cnt = 0;
-                for(auto i : ms) {
-                    if(i < key) ++cnt;
-                    else break;
-                }
-                assert(cnt + 1 == tr.rank(key));
-            }
-            puts("rank testing completed!");
-        }
-    }
-} test;
-
-int main() { return 0; }
