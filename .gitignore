@@ -26,3 +26,9 @@
 *.exe
 *.out
 *.app
+
+# Document
+*.doc
+*.docx
+*.pdf
+
