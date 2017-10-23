@@ -1,8 +1,10 @@
+template<typename T, class _Comp = less<T>>
 struct Treap {
-    const static int NODECNT = 1000005;
+    const static int NODECNT = _;
     struct Node {
-        int ch[2], p, v, sz;
-        void make(int _l, int _r, int _p, int _v) {
+        int ch[2], p, sz;
+        T v;
+        void make(int _l, int _r, int _p, const T& _v) {
             ch[0] = _l; ch[1] = _r; p = _p; v = _v; sz = 1;
         }
     } node[NODECNT];
@@ -13,34 +15,29 @@ struct Treap {
         node[x].sz += node[x].ch[0] == -1 ? 0 : node[node[x].ch[0]].sz;
         node[x].sz += node[x].ch[1] == -1 ? 0 : node[node[x].ch[1]].sz;
     }
+    _Comp cmp;
 
-    Treap() {
-        unsigned seed = 19971023;//倩倩的生日拥有华丽的特效
-        srand(seed);
-        clear();
-    }
+    explicit Treap(const _Comp& c) : cmp(c) { unsigned seed = 19971023; srand(seed); clear(); }
 
-    void clear() {
-        m_rt = -1;
-        mp_idx = -1;
-        node_idx = 0;
-    }
+    Treap() : cmp(_Comp()) { unsigned seed = 19971023; srand(seed); clear(); }
 
-    void ins(int val) { _ins(m_rt, val); }
-    void _ins(int& rt, int val) {
+    void clear() { m_rt = -1; mp_idx = -1; node_idx = 0; }
+
+    void ins(const T& val) { _ins(m_rt, val); }
+    void _ins(int& rt, const T& val) {
         if(rt == -1) {
             if(mp_idx == -1) { node[rt = node_idx++].make(-1, -1, rand(), val); }
             else { node[rt = mp[mp_idx--]].make(-1, -1, rand(), val); }
         } else {
-            int type = node[rt].v < val;
+            int type = cmp(node[rt].v, val);
             _ins(node[rt].ch[type], val);
             maintain(rt);
             if(node[rt].p < node[node[rt].ch[type]].p) rotate(rt, type);
         }
     }
 
-    void del(int val) { _del(m_rt, val); }
-    void _del(int& rt, int val) {
+    void del(const T& val) { _del(m_rt, val); }
+    void _del(int& rt, const T& val) {
 		assert(rt != -1);
         if(node[rt].v == val) {
             if(node[rt].ch[0] == -1) {
@@ -56,16 +53,16 @@ struct Treap {
                 maintain(rt);
             }
         } else {
-            _del(node[rt].ch[node[rt].v < val], val);
+            _del(node[rt].ch[cmp(node[rt].v, val)], val);
             maintain(rt);
         }
     }
 
-    int find(int val) {
+    int find(const T& val) {
         int rt = m_rt;
         while(rt != -1) {
             if(node[rt].v == val) return rt;
-            rt = node[rt].ch[node[rt].v < val];
+            rt = node[rt].ch[cmp(node[rt].v, val)];
         }
         return -1;
     }
@@ -96,11 +93,11 @@ struct Treap {
         return res;
     }
 
-    int rank(int val) {
+    int rank(const T& val) {
         int rt = m_rt, cnt = 0;
         while(rt != -1) {
             int le = node[rt].ch[0] == -1 ? 0 : node[node[rt].ch[0]].sz;
-            if(node[rt].v < val) {
+            if(cmp(node[rt].v, val)) {
                 cnt += le + 1;
                 rt = node[rt].ch[1];
             } else {
@@ -111,4 +108,4 @@ struct Treap {
     }
 
     int size() { return node[m_rt].sz; }
-} tr;
+};
