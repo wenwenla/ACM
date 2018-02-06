@@ -1,4 +1,5 @@
 namespace UFS {
+	//1 base
     const int N = 1e5 + 10;
     int fa[N];
     inline void init() { memset(fa, 0xff, sizeof(fa)); }
