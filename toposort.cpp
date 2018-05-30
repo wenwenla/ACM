@@ -18,6 +18,7 @@ void addedge(int from, int to) {
     ++indeg[to];
 }
 
+// toposeq[0, n)
 bool toposort(int n) {
     int idx = 0;
     queue<int> que;
