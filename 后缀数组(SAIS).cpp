@@ -3,9 +3,9 @@ struct SuffixArray {
     bool type[size<<1];
     int bucket[size],bucket1[size];
     int sa[size],rk[size],ht[size];
-    inline bool isLMS(const int i,const bool *type) { return i>0&&type[i]&&!type[i-1];}
+    bool isLMS(const int i,const bool *type) { return i>0&&type[i]&&!type[i-1];}
     template<class T>
-    inline void inducedSort(T s,int *sa,const int len,const int cm,const int sz,bool *type,int *bucket,int *cntbuf,int *p) {
+    void inducedSort(T s,int *sa,const int len,const int cm,const int sz,bool *type,int *bucket,int *cntbuf,int *p) {
         memset(bucket,0,sizeof(int) * cm);
         memset(sa,-1,sizeof(int) * len);
         for (int i=0;i<len;i++) bucket[s[i]]++;
@@ -21,7 +21,7 @@ struct SuffixArray {
             if (sa[i]>0&&type[sa[i]-1]) sa[--cntbuf[s[sa[i]-1]]]=sa[i]-1;
     }
     template<class T>
-    inline void sais(T s,int *sa,int len,bool *type,int *bucket,int *bucket1,int cm) {
+    void sais(T s,int *sa,int len,bool *type,int *bucket,int *bucket1,int cm) {
         int i,j,sz=0,cnt=0,p=-1,x,*cntbuf=bucket+cm;
         type[len-1]=1;
         for (i=len-2;i>=0;i--) type[i]=s[i]<s[i+1]||(s[i]==s[i+1]&&type[i+1]);
@@ -54,16 +54,19 @@ struct SuffixArray {
         inducedSort(s,sa,len,cm,sz,type,bucket,cntbuf,bucket2);
     }
     template<class T>
-    inline void getHeight(T s,int n) {
-        for (int i=1;i<=n;i++) rk[sa[i]]=i;
-        int j=0,k=0;
-        for (int i=0;i<n;ht[rk[i++]]=k)
-            for (k?k--:0,j=sa[rk[i]-1];s[i+k]==s[j+k];k++);
+    void getHeight(T s,int n) {
+        int i, j, k = 0;
+        for(i = 0; i < n; ++i) rk[sa[i]] = i;
+        for(i = 0; i < n; ++i) {
+            if(k) --k;
+            j = sa[rk[i] - 1];
+            while(s[i + k] == s[j + k]) ++k;
+            ht[rk[i]] = k;
+        }
     }
     template<class T>
-    inline void init(T s,const int len,const int cm) {
+    void init(T s,const int len,const int cm) {
         sais(s,sa,len,type,bucket,bucket1,cm);
-        for (int i=1;i<len;i++) rk[sa[i]]=i;
         getHeight(s,len);
     }
 };
