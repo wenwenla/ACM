@@ -1,37 +1,31 @@
-int Pi[N];//next
-
-void make_prefix(const char* p) {
-    //1 base
-    Pi[1] = 0;
-    int k = 0;
-    for(int i = 2; p[i]; ++i) {
-        while(k > 0 && p[k + 1] != p[i]) {
-            k = Pi[k];
-        }
-        if(p[k + 1] == p[i]) {
-            ++k;
-        }
-        Pi[i] = k;
-    }
-}
-
-int kmp_match(const char* p, const char* s) {
-    //1 base
-    make_prefix(p);
-    int len = strlen(p + 1);
-    int cnt = 0;
-    int ans = 0;
-    for(int i = 1; s[i]; ++i) {
-        while(cnt > 0 && p[cnt + 1] != s[i]) {
-            cnt = Pi[cnt];
-        }
-        if(p[cnt + 1] == s[i]) {
-            ++cnt;
-        }
-        if(cnt == len) {
-            ++ans;
-            cnt = Pi[cnt];
+const int N = 100005;
+struct KMP {
+    int fail[N], plen;
+    const char* p;
+    void init(const char* pattern) {
+        p = pattern;
+        plen = strlen(p);
+        fail[0] = 0; fail[1] = 0;
+        for(int i = 2; i <= plen; ++i) {
+            int k = fail[i - 1];
+            while(k != 0 && p[i - 1] != p[k]) k = fail[k];
+            fail[i] = (p[i - 1] == p[k]) ? k + 1 : 0;
         }
     }
-    return ans;
-}
+    int match(const char* s) {
+        int ans = 0, np = 0;
+        for(int i = 0; s[i]; ++i) {
+            while(np != 0 && s[i] != p[np]) {
+                np = fail[np];
+            }
+            if(s[i] == p[np]) ++np;
+            if(np == plen) {
+                ++ans;
+                SELECT_ONE
+                //np = fail[np];
+                //np = 0;
+            }
+        }
+        return ans;
+    }
+} kmp;
